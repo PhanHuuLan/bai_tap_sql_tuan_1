@@ -190,3 +190,21 @@ end
 select dbo.SanPham('samsum') as soluongSP
 
 drop function SanPham
+---Vanni---
+--- trigger---
+create trigger demo1SSS on CUSTOMER
+FOR UPDATE, INSERT
+AS
+BEGIN
+    PRINT'NHAP THANH CONG'
+END
+GO
+INSERT INTO CUSTOMER VALUES
+	('MKH04','Hang Nguyen','ha@gmail.com','0339410120','Hoa Vang');
+GO
+---------------------------------
+SELECT	*from CUSTOMER
+GO
+
+
+
