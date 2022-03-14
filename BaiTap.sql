@@ -99,12 +99,23 @@ INSERT INTO ORDER_DETAILS VALUES
  
 
 --VIEW
--- xem mKH, hoten, sdt cua bang khach hang
-CREATE VIEW CUSTOMER_VIEW AS
-SELECT maKH, hoten, sdt
-FROM  CUSTOMER;
+---- 1.1 Tạo khung nhìn có tên là CUSTOMER_VIEW để xem thông tin KH
+create view CUSTOMER_VIEW as
+select maKH, hoten, sdt
+from  CUSTOMER;
+
+select * from CUSTOMER_VIEW;
+----1.2 Tạo khung nhìn có tên là Customer_Processing để xem thông tin của 
+--khách hàng đã có trạng thái đặt hàng là "Cho Xu Ly"
+create view Customer_Processing
+as
+select customer.*, ORDERS.trangthai from CUSTOMER
+inner join ORDERS on CUSTOMER.maKH = ORDERS.maKH
+where ORDERS.trangthai = 'Cho Xu Ly'
+
+select * from Customer_Processing
 --PROCEDURE
--- them Khach hang
+---- 1.1 them Khach hang
 create proc q_AddCustomer(
 	 @maKH varchar(10),
     @hoten varchar(100),
@@ -125,9 +136,10 @@ begin
 end
 
 exec q_AddCustomer @maKH = 'MKH04', @hoten = 'Phan Huu B', @email = 'huub@gmail.com', @sdt = '0339410001', @diachi = 'Ha Noi';
+
 select * from CUSTOMER
 
--- sua thong tin khach hang
+---- 1.2 sua thong tin khach hang
 create proc P_UpdateCustomer(
 	@maKH varchar(10),
 	@name nvarchar(50),
@@ -151,4 +163,18 @@ end
 exec P_UpdateCustomer @maKH = 'MKH01', @name = 'Phan Huu Lan Lan',@email = 'lanhuu@gmail.com', @phone = '0339410753', @adress = 'Da Nang'
 select * from CUSTOMER
 
+
+-- FUNCTION: 
+---- 1.1: đếm tổng tiền trong bảng Oders
+create function Sum_Oders()
+returns int
+as
+begin
+	declare @tong int
+	select @tong = SUM(tongtien)
+	from ORDERS
+	return @tong
+end
+
+select dbo.Sum_Oders() Tong_Tien;
 
