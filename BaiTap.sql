@@ -106,12 +106,12 @@ from  CUSTOMER;
 
 select * from CUSTOMER_VIEW;
 ----1.2 Tạo khung nhìn có tên là Customer_Processing để xem thông tin của 
---khách hàng đã có trạng thái đặt hàng là "Cho Xu Ly"
+--khách hàng đã có trạng thái đặt hàng là "Da Xu Ly"
 create view Customer_Processing
 as
 select customer.*, ORDERS.trangthai from CUSTOMER
 inner join ORDERS on CUSTOMER.maKH = ORDERS.maKH
-where ORDERS.trangthai = 'Cho Xu Ly'
+where ORDERS.trangthai = 'Da Xu Ly'
 
 select * from Customer_Processing
 --PROCEDURE
@@ -177,4 +177,16 @@ begin
 end
 
 select dbo.Sum_Oders() Tong_Tien;
+----Vo Dai Hua
+create function SanPham(@TenSP VARCHAR(100))
+returns Int
+as
+begin
+		declare @SoLuongSanPham int
+		select @SoLuongSanPham= soluongSP from DBO.PRODUCT where  tenSP = @tenSP
+		return @SoLuongSanPham
+end
 
+select dbo.SanPham('samsum') as soluongSP
+
+drop function SanPham
